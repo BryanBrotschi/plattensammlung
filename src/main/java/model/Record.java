@@ -2,6 +2,8 @@ package model;
 
 import java.time.LocalDate;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -9,6 +11,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.property.DoubleProperty;
 
+@XmlRootElement
 public class Record {
 
 	private StringProperty artist;
@@ -92,7 +95,7 @@ public class Record {
 
 	}
 
-	// e-Mail
+	// Condition
 
 	public String getCondition() {
 		return condition.get();

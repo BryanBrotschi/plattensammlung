@@ -23,6 +23,7 @@ import javafx.scene.control.TextField;
 import model.Record;
 import util.DateUtil;
 
+
 public class Controller {
     private static ObservableList<Record> recordList;
 
@@ -323,6 +324,7 @@ public class Controller {
                         selectedRecord.setCondition("P");
                         break;
                 }
+             
                 showRecordDetails(selectedRecord);
                 tabPane.getSelectionModel().select(tabOverview);
 
@@ -360,6 +362,7 @@ public class Controller {
                         newRecord.setCondition("P");
                         break;
                 }
+    
                 showRecordDetails(newRecord);
                 tabPane.getSelectionModel().select(tabOverview);
                 recordTableView.getItems().add(newRecord);

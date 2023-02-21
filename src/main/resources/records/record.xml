@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<record>
+    <artist>John Doe</artist>
+    <condition>Good</condition>
+    <genre>Pop</genre>
+    <notice>None</notice>
+    <price>12.99</price>
+    <recordTitle>My Record Title</recordTitle>
+    <releaseDate/>
+</record>
