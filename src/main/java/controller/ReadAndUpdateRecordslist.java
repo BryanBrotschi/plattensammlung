@@ -41,13 +41,5 @@ public class ReadAndUpdateRecordslist {
     }
     
 
-    private static void createJsonFile() throws IOException {
-        ArrayList<Record> records = new ArrayList<>();
-        Record record = new Record("John Doe", "My Record Title", LocalDate.parse("1995-09-29"), "Pop", "Good", "None", 12.99);
-        records.add(record);
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule()); // register the JavaTimeModule
-        mapper.writeValue(new File(FILE_PATH), records);
-        System.out.println("JSON file created successfully.");
-    }
+    
 }

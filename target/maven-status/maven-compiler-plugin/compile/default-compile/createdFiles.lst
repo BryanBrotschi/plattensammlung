@@ -1,9 +1,6 @@
-util\DateUtil.class
 controller\Controller.class
 MainApp.class
 controller\LocalDateAdapter.class
-controller\ReadAndUpdateRecordslist$1.class
+controller\Controller$1.class
 model\Record.class
 MainAppLauncher.class
-controller\ReadAndUpdateRecordslist.class
-controller\Controller$1.class
