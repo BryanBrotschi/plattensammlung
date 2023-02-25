@@ -13,6 +13,7 @@ import javafx.beans.property.DoubleProperty;
 
 public class Record {
 
+	private StringProperty category;
 	private StringProperty artist;
 	private StringProperty recordTitle;
 	private ObjectProperty<LocalDate> releaseDate;
@@ -24,12 +25,13 @@ public class Record {
 
 
 	public Record() {
-		this(null, null, null, null, null, null, 0.0);
+		this(null, null, null, null, null, null, null, 0.0);
 	}
 
-	public Record(String artist, String recordTitle, LocalDate releaseDate, String genre, String condition,
+	public Record(String category, String artist, String recordTitle, LocalDate releaseDate, String genre, String condition,
 			String notice, Double price) {
 
+		this.category = new SimpleStringProperty(category);
 		this.artist = new SimpleStringProperty(artist);
 		this.recordTitle = new SimpleStringProperty(recordTitle);
 		this.releaseDate = new SimpleObjectProperty<LocalDate>(releaseDate);
@@ -39,6 +41,17 @@ public class Record {
 		this.price = new SimpleDoubleProperty(price);
 	}
 
+	//category
+
+	public StringProperty getCategory() {
+		return category;
+	}
+
+	public void setCategory(StringProperty category) {
+		this.category = category;
+	}
+	
+	
 	// artist
 
 	public String getArtist() {
