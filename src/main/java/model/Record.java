@@ -2,7 +2,6 @@ package model;
 
 import java.time.LocalDate;
 
-import javax.xml.bind.annotation.XmlRootElement;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -11,9 +10,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.property.DoubleProperty;
 
-@XmlRootElement
+
 public class Record {
 
+	private Category category;
 	private StringProperty artist;
 	private StringProperty recordTitle;
 	private ObjectProperty<LocalDate> releaseDate;
@@ -21,14 +21,17 @@ public class Record {
 	private StringProperty condition;
 	private StringProperty notice;
 	private DoubleProperty price;
+	
+
 
 	public Record() {
-		this(null, null, null, null, null, null, 0.0);
+		this(null, null, null, null, null, null, null, 0.0);
 	}
 
-	public Record(String artist, String recordTitle, LocalDate releaseDate, String genre, String condition,
+	public Record(Category category, String artist, String recordTitle, LocalDate releaseDate, String genre, String condition,
 			String notice, Double price) {
 
+		this.category = category;
 		this.artist = new SimpleStringProperty(artist);
 		this.recordTitle = new SimpleStringProperty(recordTitle);
 		this.releaseDate = new SimpleObjectProperty<LocalDate>(releaseDate);
@@ -38,6 +41,25 @@ public class Record {
 		this.price = new SimpleDoubleProperty(price);
 	}
 
+	//category
+
+	public enum Category {
+		Casette, CD, VinylRecord;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	public Category categoryProperty() {
+		return category;
+	}
+	
+	
 	// artist
 
 	public String getArtist() {
@@ -139,9 +161,8 @@ public class Record {
 
 	@Override
 	public String toString() {
-		return "Record [artist=" + artist + ", recordTitle=" + recordTitle + " \n releaseDate=" + releaseDate
-				+ ", genre="
-				+ genre + "\n condition=" + condition + ", notice=" + notice + "\n price=" + price + "]";
+		return "Record [category=" + category + ", artist=" + artist + ", recordTitle=" + recordTitle + " \n releaseDate=" + releaseDate
+				+ ", genre=" + genre + "\n condition=" + condition + ", notice=" + notice + "\n price=" + price + "]";
 	}
 
 }
