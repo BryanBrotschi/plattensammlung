@@ -2,7 +2,6 @@ package model;
 
 import java.time.LocalDate;
 
-import javax.xml.bind.annotation.XmlRootElement;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -11,7 +10,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.property.DoubleProperty;
 
-@XmlRootElement
+
 public class Record {
 
 	private StringProperty artist;
@@ -21,6 +20,8 @@ public class Record {
 	private StringProperty condition;
 	private StringProperty notice;
 	private DoubleProperty price;
+	
+
 
 	public Record() {
 		this(null, null, null, null, null, null, 0.0);
