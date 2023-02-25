@@ -160,7 +160,7 @@ public class Controller {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Plattensammlung");
         alert.setHeaderText("Persönliche Informationen");
-        alert.setContentText("Programmierer: \tBryan Brotschi \nDatum: \t\t\t21.06.2022");
+        alert.setContentText("Programmierer: \tBryan Brotschi & Andreas Moser \nDatum: \t\t\t25.02.2023");
         alert.showAndWait();
     }
 
