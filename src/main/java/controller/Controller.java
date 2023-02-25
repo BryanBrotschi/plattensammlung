@@ -21,6 +21,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import model.Record;
+import model.Record.Category;
 import util.DateUtil;
 
 
@@ -218,12 +219,12 @@ public class Controller {
 
     private ObservableList<Record> getInitialTableData() {
         List<Record> list = new ArrayList<>();
-        list.add(new Record("James Brown", "Reality", LocalDate.of(1974, 9, 29), "Funk", "NM", "Originalpressung US",
+        list.add(new Record(Category.VinylRecord,"James Brown", "Reality", LocalDate.of(1974, 9, 29), "Funk", "NM", "Originalpressung US",
                 30.50));
-        list.add(new Record("Surprize", "Keep On Truckin'", LocalDate.of(1974, 1, 2), "Rock, Blues", "M",
+        list.add(new Record(Category.VinylRecord,"Surprize", "Keep On Truckin'", LocalDate.of(1974, 1, 2), "Rock, Blues", "M",
                 "Repress, Psychedelic Rock",
                 120.50));
-        list.add(new Record("Ian Carr with Nucleus", "Labyrinth", LocalDate.of(1973, 1, 2), "Jazz, Rock, Fusion", "VG+",
+        list.add(new Record(Category.CD,"Ian Carr with Nucleus", "Labyrinth", LocalDate.of(1973, 1, 2), "Jazz, Rock, Fusion", "VG+",
                 "Spaceship label",
                 70.45));
 
