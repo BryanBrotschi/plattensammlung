@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import model.Record;
+import model.Record.Category;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,8 +19,8 @@ public class ReadAndUpdateRecordslist {
     public static void main(String[] args) throws IOException {
         createJsonFile();
         ArrayList<Record> records = readRecordsFromJson(FILE_PATH);
-        Record record1 = new Record("Jane Smith", "New Record 1", LocalDate.parse("1995-09-29"), "Rock", "Excellent", "None", 14.99);
-        Record record2 = new Record("Bob Johnson", "New Record 2", LocalDate.parse("1995-09-29"), "Jazz", "Very Good", "Limited edition", 19.99);
+        Record record1 = new Record(Category.Casette,"Jane Smith", "New Record 1", LocalDate.parse("1995-09-29"), "Rock", "Excellent", "None", 14.99);
+        Record record2 = new Record(Category.VinylRecord,"Bob Johnson", "New Record 2", LocalDate.parse("1995-09-29"), "Jazz", "Very Good", "Limited edition", 19.99);
         records.add(record1);
         records.add(record2);
         saveRecordsToJson(records, FILE_PATH);
@@ -43,7 +44,7 @@ public class ReadAndUpdateRecordslist {
 
     private static void createJsonFile() throws IOException {
         ArrayList<Record> records = new ArrayList<>();
-        Record record = new Record("John Doe", "My Record Title", LocalDate.parse("1995-09-29"), "Pop", "Good", "None", 12.99);
+        Record record = new Record(Category.CD,"John Doe", "My Record Title", LocalDate.parse("1995-09-29"), "Pop", "Good", "None", 12.99);
         records.add(record);
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule()); // register the JavaTimeModule
