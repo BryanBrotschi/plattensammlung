@@ -1,4 +1,5 @@
 package controller;
+
 import javafx.fxml.FXML;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
@@ -15,17 +16,23 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import java.io.File;
+import java.io.IOException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import model.Record;
 import model.Record.Category;
 import util.DateUtil;
 
-
 public class Controller {
+    private static final String FILE_PATH = "src/main/resources/records/records.json";
     private static ObservableList<Record> recordList;
 
     @FXML
@@ -83,9 +90,10 @@ public class Controller {
 
     Record selectedRecord;
     Image defaultCover;
+    List<Record> list;
 
     @FXML
-    private void initialize() {
+    private void initialize() throws IOException {
         comboBoxCondition.getItems().add("Mint (M)");
         comboBoxCondition.getItems().add("Near Mint (NM or M-)");
         comboBoxCondition.getItems().add("Very Good Plus (VG+)");
@@ -149,7 +157,7 @@ public class Controller {
         }
     }
 
-    //end methode
+    // end methode
     public void exit() {
         Platform.exit();
     }
@@ -217,19 +225,16 @@ public class Controller {
         tabPane.getSelectionModel().select(tabOverview);
     }
 
-    private ObservableList<Record> getInitialTableData() {
-        List<Record> list = new ArrayList<>();
-        list.add(new Record(Category.VinylRecord,"James Brown", "Reality", LocalDate.of(1974, 9, 29), "Funk", "NM", "Originalpressung US",
-                30.50));
-        list.add(new Record(Category.VinylRecord,"Surprize", "Keep On Truckin'", LocalDate.of(1974, 1, 2), "Rock, Blues", "M",
-                "Repress, Psychedelic Rock",
-                120.50));
-        list.add(new Record(Category.CD,"Ian Carr with Nucleus", "Labyrinth", LocalDate.of(1973, 1, 2), "Jazz, Rock, Fusion", "VG+",
-                "Spaceship label",
-                70.45));
-
-        ObservableList<Record> observableList = FXCollections.observableArrayList(list);
-        return observableList;
+    private ObservableList<Record> getInitialTableData() throws IOException {
+        File f = new File(FILE_PATH);
+        if (f.exists() && !f.isDirectory()) {
+            list = readRecordsFromJson(FILE_PATH); 
+        }
+        else{
+            createJsonFile();
+            list = readRecordsFromJson(FILE_PATH); 
+        }
+        return FXCollections.observableArrayList(list);  
     }
 
     @FXML
@@ -289,7 +294,7 @@ public class Controller {
     }
 
     @FXML
-    private void saveNewRecord() {
+    private void saveNewRecord() throws IOException {
         if (isInputValid()) {
             Record selectedRecord = recordTableView.getSelectionModel().getSelectedItem();
             if (selectedRecord != null) {
@@ -325,7 +330,9 @@ public class Controller {
                         selectedRecord.setCondition("P");
                         break;
                 }
-             
+                list.remove(selectedRecord);
+                list.add(selectedRecord);
+                saveRecordsToJson((ArrayList<Record>) list, FILE_PATH);
                 showRecordDetails(selectedRecord);
                 tabPane.getSelectionModel().select(tabOverview);
 
@@ -363,45 +370,74 @@ public class Controller {
                         newRecord.setCondition("P");
                         break;
                 }
-    
+                list.add(newRecord);
+                saveRecordsToJson((ArrayList<Record>) list, FILE_PATH);
                 showRecordDetails(newRecord);
                 tabPane.getSelectionModel().select(tabOverview);
                 recordTableView.getItems().add(newRecord);
             }
         }
     }
+
     @FXML
-	private void deleteRecord() {
-		int selectedIndex = recordTableView.getSelectionModel().getSelectedIndex();
-		if (selectedIndex >= 0) {
-			Alert confirmationAlert = new Alert(AlertType.CONFIRMATION);
-			confirmationAlert.setTitle("Platte");
-			confirmationAlert.setContentText("Löschen?");
-			ButtonType okButton = new ButtonType("JA");
-			ButtonType noButton = new ButtonType("NEIN");
-			confirmationAlert.getButtonTypes().setAll(okButton, noButton);
-			Optional<ButtonType> result = confirmationAlert.showAndWait();
+    private void deleteRecord() throws IOException {
+        int selectedIndex = recordTableView.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            Alert confirmationAlert = new Alert(AlertType.CONFIRMATION);
+            confirmationAlert.setTitle("Platte");
+            confirmationAlert.setContentText("Löschen?");
+            ButtonType okButton = new ButtonType("JA");
+            ButtonType noButton = new ButtonType("NEIN");
+            confirmationAlert.getButtonTypes().setAll(okButton, noButton);
+            Optional<ButtonType> result = confirmationAlert.showAndWait();
 
-				if (result.get() == okButton) {
-					System.out.println("Button YES");  //Konsolenausgabe
-					System.out.println(selectedIndex);  //Konsolenausgabe
-					recordTableView.getItems().remove(selectedIndex);
-					clearRecordDetails();
-		
-				} else if (result.get() == noButton){
-					System.out.println("Button NO");  //Konsolenausgabe
-					confirmationAlert.close();
-				}
-		
-		} else {
+            if (result.get() == okButton) {
+                System.out.println("Button YES"); // Konsolenausgabe
+                System.out.println(selectedIndex); // Konsolenausgabe
+                recordTableView.getItems().remove(selectedIndex);
+                list.remove(selectedIndex);
+                saveRecordsToJson((ArrayList<Record>) list, FILE_PATH);
+                clearRecordDetails();
 
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Platte löschen");
-			alert.setHeaderText("Keine Platte ausgewählt");
-			alert.setContentText("Bitte wählen Sie eine Platte in der Liste aus.");
-			alert.showAndWait();
+            } else if (result.get() == noButton) {
+                System.out.println("Button NO"); // Konsolenausgabe
+                confirmationAlert.close();
+            }
 
-		}
+        } else {
 
-	}
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Platte löschen");
+            alert.setHeaderText("Keine Platte ausgewählt");
+            alert.setContentText("Bitte wählen Sie eine Platte in der Liste aus.");
+            alert.showAndWait();
+
+        }
+    }
+
+    private static void createJsonFile() throws IOException {
+        ArrayList<Record> records = new ArrayList<>();
+        Record record = new Record(Category.VinylRecord,"John Doe", "My Record Title", LocalDate.parse("1995-09-29"), "Pop", "Good", "None",
+                12.99);
+        records.add(record);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule()); // register the JavaTimeModule
+        mapper.writeValue(new File(FILE_PATH), records);
+        System.out.println("JSON file created successfully.");
+    }
+
+    private static ArrayList<Record> readRecordsFromJson(String filePath) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        File file = new File(filePath);
+        ArrayList<Record> records = objectMapper.readValue(file, new TypeReference<ArrayList<Record>>() {
+        });
+        return records;
+    }
+
+    private static void saveRecordsToJson(ArrayList<Record> records, String filePath) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.writeValue(new File(filePath), records);
+    }
 }
