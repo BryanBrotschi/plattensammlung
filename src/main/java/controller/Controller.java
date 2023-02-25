@@ -15,16 +15,26 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import javax.swing.event.ListSelectionEvent;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import model.Record;
 import util.DateUtil;
 
 
 public class Controller {
+    private static final String FILE_PATH = "src/main/resources/records/records.json";
     private static ObservableList<Record> recordList;
 
     @FXML
@@ -82,9 +92,10 @@ public class Controller {
 
     Record selectedRecord;
     Image defaultCover;
+    List<Record> list;
 
     @FXML
-    private void initialize() {
+    private void initialize() throws IOException {
         comboBoxCondition.getItems().add("Mint (M)");
         comboBoxCondition.getItems().add("Near Mint (NM or M-)");
         comboBoxCondition.getItems().add("Very Good Plus (VG+)");
@@ -216,17 +227,8 @@ public class Controller {
         tabPane.getSelectionModel().select(tabOverview);
     }
 
-    private ObservableList<Record> getInitialTableData() {
-        List<Record> list = new ArrayList<>();
-        list.add(new Record("James Brown", "Reality", LocalDate.of(1974, 9, 29), "Funk", "NM", "Originalpressung US",
-                30.50));
-        list.add(new Record("Surprize", "Keep On Truckin'", LocalDate.of(1974, 1, 2), "Rock, Blues", "M",
-                "Repress, Psychedelic Rock",
-                120.50));
-        list.add(new Record("Ian Carr with Nucleus", "Labyrinth", LocalDate.of(1973, 1, 2), "Jazz, Rock, Fusion", "VG+",
-                "Spaceship label",
-                70.45));
-
+    private ObservableList<Record> getInitialTableData() throws IOException {
+        list = readRecordsFromJson(FILE_PATH);
         ObservableList<Record> observableList = FXCollections.observableArrayList(list);
         return observableList;
     }
@@ -288,7 +290,7 @@ public class Controller {
     }
 
     @FXML
-    private void saveNewRecord() {
+    private void saveNewRecord() throws IOException {
         if (isInputValid()) {
             Record selectedRecord = recordTableView.getSelectionModel().getSelectedItem();
             if (selectedRecord != null) {
@@ -324,7 +326,8 @@ public class Controller {
                         selectedRecord.setCondition("P");
                         break;
                 }
-             
+                list.add(selectedRecord);
+                saveRecordsToJson((ArrayList<Record>) list, FILE_PATH);
                 showRecordDetails(selectedRecord);
                 tabPane.getSelectionModel().select(tabOverview);
 
@@ -362,7 +365,8 @@ public class Controller {
                         newRecord.setCondition("P");
                         break;
                 }
-    
+                list.add(newRecord);
+                saveRecordsToJson((ArrayList<Record>) list, FILE_PATH);
                 showRecordDetails(newRecord);
                 tabPane.getSelectionModel().select(tabOverview);
                 recordTableView.getItems().add(newRecord);
@@ -401,6 +405,17 @@ public class Controller {
 			alert.showAndWait();
 
 		}
-
 	}
+    private static ArrayList<Record> readRecordsFromJson(String filePath) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        File file = new File(filePath);
+        ArrayList<Record> records = objectMapper.readValue(file, new TypeReference<ArrayList<Record>>() {});
+        return records;
+    }
+    private static void saveRecordsToJson(ArrayList<Record> records, String filePath) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.writeValue(new File(filePath), records);
+    }
 }
