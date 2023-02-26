@@ -125,7 +125,8 @@ public class Controller {
     // Detailansicht
     private void showRecordDetails(Record record) {
         if (record != null) {
-            lblCategory.setText(null);
+            comboBoxCategory.setValue(record.getCategory());
+            lblCategory.setText(record.getCategory().toString());
             lblArtist.setText(record.getArtist());
             lblRecordTitle.setText(record.getRecordTitle());
             lblReleaseDate.setText(record.getReleaseDate().toString());
@@ -159,6 +160,7 @@ public class Controller {
             lblPrice.setText(record.getPrice().toString());
             lblNotice.setText(record.getNotice());
         } else {
+            lblCategory.setText("");
             lblArtist.setText("");
             lblRecordTitle.setText("");
             lblReleaseDate.setText("");
@@ -187,7 +189,8 @@ public class Controller {
     private void getRecord(Record record) {
 
         if (record != null) {
-           // txtCategory.setText(record.getCategory());
+            comboBoxCategory.setValue(record.getCategory());
+            txtCategory.setText(record.getCategory().toString());
             txtArtist.setText(record.getArtist());
             txtTitle.setText(record.getRecordTitle());
             txtGenre.setText(record.getGenre());
@@ -315,7 +318,7 @@ public class Controller {
         if (isInputValid()) {
             Record selectedRecord = recordTableView.getSelectionModel().getSelectedItem();
             if (selectedRecord != null) {
-                selectedRecord.setArtist(txtCategory.getText());
+                selectedRecord.setCategory(Category.valueOf(txtCategory.getText()));
                 selectedRecord.setArtist(txtArtist.getText());
                 selectedRecord.setGenre(txtGenre.getText());
                 selectedRecord.setReleaseDate(DateUtil.parse(txtReleaseDate.getText()));
@@ -356,7 +359,7 @@ public class Controller {
 
             } else {
                 Record newRecord = new Record();
-                newRecord.setArtist(txtCategory.getText());
+                newRecord.setCategory(Category.valueOf(txtCategory.getText()));
                 newRecord.setArtist(txtArtist.getText());
                 newRecord.setGenre(txtGenre.getText());
                 newRecord.setReleaseDate(DateUtil.parse(txtReleaseDate.getText()));
