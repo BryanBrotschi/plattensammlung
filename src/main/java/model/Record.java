@@ -13,8 +13,6 @@ import javafx.beans.property.DoubleProperty;
 
 public class Record {
 
-	
-
 	private Category category;
 	private StringProperty artist;
 	private StringProperty recordTitle;

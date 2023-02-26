@@ -35,6 +35,7 @@ import util.DateUtil;
 
 public class Controller {
     private static final String FILE_PATH = "src/main/resources/records/records.json";
+    private static final String strDefaultCover = "src/main/resources/images/defaultrecord.png";
     private static ObservableList<Record> recordList;
     @FXML
     private TableView<Record> recordTableView;
@@ -98,7 +99,8 @@ public class Controller {
     private Label systemLabel;
 
     Record selectedRecord;
-    Image defaultCover;
+    
+    Image image;
     List<Record> list;
 
     @FXML
@@ -112,7 +114,7 @@ public class Controller {
         comboBoxCondition.getItems().add("Fair (F)");
         comboBoxCondition.getItems().add("Poor (P)");
 
-        //Enum mit DropDown verbinden       
+        // Enum mit DropDown verbinden
         ObservableList<Category> categoryList = FXCollections.observableArrayList(Category.values());
         comboBoxCategory.setItems(categoryList);
 
@@ -128,13 +130,17 @@ public class Controller {
     // Detailansicht
     private void showRecordDetails(Record record) {
         if (record != null) {
-            //comboBoxCategory.setValue(record.getCategory());
+            // comboBoxCategory.setValue(record.getCategory());
             lblCategory.setText(record.getCategory().toString());
             lblArtist.setText(record.getArtist());
             lblRecordTitle.setText(record.getRecordTitle());
             lblReleaseDate.setText(record.getReleaseDate().toString());
             lblGenre.setText(record.getGenre());
-            Image image = new Image(record.getCover());
+            if (record.getCover() != null) {
+                image = new Image(record.getCover());
+            } else {
+                image = new Image(strDefaultCover);
+            }
             imgCover.setImage(image);
             switch (record.getCondition()) {
                 case "M":
@@ -185,24 +191,29 @@ public class Controller {
     private void myInfo() {
         // Show the about message.
         Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Plattensammlung");
+        alert.setTitle("Musiksammlung");
         alert.setHeaderText("Persönliche Informationen");
-        alert.setContentText("Programmierer: \tBryan Brotschi & Andreas Moser \nDatum: \t\t\t25.02.2023");
+        alert.setContentText("Programmierer: \tBryan Brotschi & Andreas Moser \nDatum: \t\t\t26.02.2023");
         alert.showAndWait();
     }
 
     private void getRecord(Record record) {
 
         if (record != null) {
-            //comboBoxCategory.setValue(record.getCategory());
-            txtCategory.setText(record.getCategory().toString());
+            // comboBoxCategory.setValue(record.getCategory());
+
             txtArtist.setText(record.getArtist());
             txtTitle.setText(record.getRecordTitle());
             txtGenre.setText(record.getGenre());
             txtPrice.setText(record.getPrice().toString());
             txtNotice.setText(record.getNotice());
             txtReleaseDate.setText(DateUtil.format(record.getReleaseDate()));
-            
+            if (record.getCover() != null) {
+                image = new Image(record.getCover());
+            } else {
+                image = new Image(strDefaultCover);
+            }
+            imgCoverEditor.setImage(image);
             switch (record.getCondition()) {
                 case "M":
                     comboBoxCondition.getSelectionModel().select(0);
@@ -229,7 +240,18 @@ public class Controller {
                     comboBoxCondition.getSelectionModel().select(7);
                     break;
             }
-        } 
+            switch (record.getCategory().name()) {
+                case "Kasette":
+                    comboBoxCategory.getSelectionModel().select(0);
+                    break;
+                case "CD":
+                    comboBoxCategory.getSelectionModel().select(1);
+                    break;
+                case "VinylRecord":
+                    comboBoxCategory.getSelectionModel().select(2);
+                    break;
+            }
+        }
     }
 
     @FXML
@@ -249,18 +271,17 @@ public class Controller {
     private ObservableList<Record> getInitialTableData() throws IOException {
         File f = new File(FILE_PATH);
         if (f.exists() && !f.isDirectory()) {
-            list = readRecordsFromJson(FILE_PATH); 
-        }
-        else{
+            list = readRecordsFromJson(FILE_PATH);
+        } else {
             createJsonFile();
-            list = readRecordsFromJson(FILE_PATH); 
+            list = readRecordsFromJson(FILE_PATH);
         }
-        return FXCollections.observableArrayList(list);  
+        return FXCollections.observableArrayList(list);
     }
 
     @FXML
     private void clearRecordDetails() {
-        //comboBoxCategory.getSelectionModel().clearSelection();
+        // comboBoxCategory.getSelectionModel().clearSelection();
         txtArtist.setText("");
         txtGenre.setText("");
         txtNotice.setText("");
@@ -274,9 +295,9 @@ public class Controller {
 
     private boolean isInputValid() {
         String errorMessage = "";
-        //if (comboBoxCategory.getSelectionModel().isEmpty()) {
-          //  errorMessage += "Bitte wählen Sie die Kategorie aus!\n";
-        //}
+        // if (comboBoxCategory.getSelectionModel().isEmpty()) {
+        // errorMessage += "Bitte wählen Sie die Kategorie aus!\n";
+        // }
         if (txtArtist.getText().isEmpty()) {
             errorMessage += "Artist ist leer!\n";
         }
@@ -330,7 +351,7 @@ public class Controller {
         if (selectedFile != null) {
             // Load the selected image file into an Image object
             Image image = new Image(selectedFile.toURI().toString());
-            //imgCoverEditor = new ImageView();
+            // imgCoverEditor = new ImageView();
             // Assign the Image object to an ImageView in SceneBuilder
             imgCover.setImage(image);
             imgCoverEditor.setImage(image);
@@ -343,7 +364,6 @@ public class Controller {
         if (isInputValid()) {
             Record selectedRecord = recordTableView.getSelectionModel().getSelectedItem();
             if (selectedRecord != null) {
-                //selectedRecord.setCategory(Category.valueOf(txtCategory.getText()));
                 selectedRecord.setArtist(txtArtist.getText());
                 selectedRecord.setGenre(txtGenre.getText());
                 selectedRecord.setReleaseDate(DateUtil.parse(txtReleaseDate.getText()));
@@ -376,6 +396,17 @@ public class Controller {
                         selectedRecord.setCondition("P");
                         break;
                 }
+                switch (comboBoxCategory.getSelectionModel().getSelectedIndex()) {
+                    case 0:
+                        selectedRecord.setCategory(Category.Kasette);
+                        break;
+                    case 1:
+                        selectedRecord.setCategory(Category.CD);
+                        break;
+                    case 2:
+                        selectedRecord.setCategory(Category.VinylRecord);
+                        break;
+                }
                 list.remove(selectedRecord);
                 list.add(selectedRecord);
                 saveRecordsToJson((ArrayList<Record>) list, FILE_PATH);
@@ -384,7 +415,6 @@ public class Controller {
 
             } else {
                 Record newRecord = new Record();
-                //newRecord.setCategory(Category.valueOf(txtCategory.getText()));
                 newRecord.setArtist(txtArtist.getText());
                 newRecord.setGenre(txtGenre.getText());
                 newRecord.setReleaseDate(DateUtil.parse(txtReleaseDate.getText()));
@@ -415,6 +445,17 @@ public class Controller {
                         break;
                     case 7:
                         newRecord.setCondition("P");
+                        break;
+                }
+                switch (comboBoxCategory.getSelectionModel().getSelectedIndex()) {
+                    case 0:
+                        newRecord.setCategory(Category.Kasette);
+                        break;
+                    case 1:
+                        newRecord.setCategory(Category.CD);
+                        break;
+                    case 2:
+                        newRecord.setCategory(Category.VinylRecord);
                         break;
                 }
                 list.add(newRecord);
@@ -464,7 +505,8 @@ public class Controller {
 
     private static void createJsonFile() throws IOException {
         ArrayList<Record> records = new ArrayList<>();
-        Record record = new Record(Category.VinylRecord,"John Doe", "My Record Title", LocalDate.parse("1995-09-29"), "Pop", "Good", "None",12.99, "src/main/resources/images/defaultrecord.png");
+        Record record = new Record(Category.VinylRecord, "John Doe", "My Record Title", LocalDate.parse("1995-09-29"),
+                "Pop", "Good", "None", 12.99, "src/main/resources/images/defaultrecord.png");
 
         records.add(record);
         ObjectMapper mapper = new ObjectMapper();
