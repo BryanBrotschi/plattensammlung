@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
@@ -35,7 +36,6 @@ import util.DateUtil;
 
 public class Controller {
     private static final String FILE_PATH = "src/main/resources/records/records.json";
-    private static final String strDefaultCover = "src/main/resources/images/defaultrecord.png";
     private static ObservableList<Record> recordList;
     @FXML
     private TableView<Record> recordTableView;
@@ -139,7 +139,7 @@ public class Controller {
             if (record.getCover() != null) {
                 image = new Image(record.getCover());
             } else {
-                image = new Image(strDefaultCover);
+                image = null;
             }
             imgCover.setImage(image);
             switch (record.getCondition()) {
@@ -211,7 +211,7 @@ public class Controller {
             if (record.getCover() != null) {
                 image = new Image(record.getCover());
             } else {
-                image = new Image(strDefaultCover);
+                image = null;
             }
             imgCoverEditor.setImage(image);
             switch (record.getCondition()) {

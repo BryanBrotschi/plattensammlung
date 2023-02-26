@@ -15,7 +15,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("Plattensammlung");
+        this.primaryStage.setTitle("Musiksammlung");
         this.showMainView();
     }
 
