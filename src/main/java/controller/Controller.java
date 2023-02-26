@@ -60,9 +60,13 @@ public class Controller {
     @FXML
     private Label lblArtist;
     @FXML
+    private Label lblCategory;
+    @FXML
     private Label lblNotice;
     @FXML
     private ImageView imgCover;
+    @FXML
+    private TextField txtCategory;
     @FXML
     private TextField txtArtist;
     @FXML
@@ -77,6 +81,8 @@ public class Controller {
     private TextField txtTitle;
     @FXML
     private ComboBox<String> comboBoxCondition;
+    @FXML
+    private ComboBox<Category> comboBoxCategory;
     @FXML
     private Button btnDelete;
     @FXML
@@ -102,6 +108,11 @@ public class Controller {
         comboBoxCondition.getItems().add("Good (G)");
         comboBoxCondition.getItems().add("Fair (F)");
         comboBoxCondition.getItems().add("Poor (P)");
+
+        //Enum mit DropDown verbinden       
+        ObservableList<Category> categoryList = FXCollections.observableArrayList(Category.values());
+        comboBoxCategory.setItems(categoryList);
+
         recordList = getInitialTableData();
         recordTableView.setItems(recordList);
         recordTitleColumn.setCellValueFactory(cellData -> cellData.getValue().recordTitleProperty());
@@ -114,6 +125,7 @@ public class Controller {
     // Detailansicht
     private void showRecordDetails(Record record) {
         if (record != null) {
+            lblCategory.setText(null);
             lblArtist.setText(record.getArtist());
             lblRecordTitle.setText(record.getRecordTitle());
             lblReleaseDate.setText(record.getReleaseDate().toString());
@@ -175,6 +187,7 @@ public class Controller {
     private void getRecord(Record record) {
 
         if (record != null) {
+           // txtCategory.setText(record.getCategory());
             txtArtist.setText(record.getArtist());
             txtTitle.setText(record.getRecordTitle());
             txtGenre.setText(record.getGenre());
@@ -239,6 +252,7 @@ public class Controller {
 
     @FXML
     private void clearRecordDetails() {
+        txtCategory.setText("");
         txtArtist.setText("");
         txtGenre.setText("");
         txtNotice.setText("");
@@ -252,6 +266,9 @@ public class Controller {
 
     private boolean isInputValid() {
         String errorMessage = "";
+        if (txtCategory.getText().isEmpty()) {
+            errorMessage += "Kategorie ist leer!\n";
+        }
         if (txtArtist.getText().isEmpty()) {
             errorMessage += "Artist ist leer!\n";
         }
@@ -298,6 +315,7 @@ public class Controller {
         if (isInputValid()) {
             Record selectedRecord = recordTableView.getSelectionModel().getSelectedItem();
             if (selectedRecord != null) {
+                selectedRecord.setArtist(txtCategory.getText());
                 selectedRecord.setArtist(txtArtist.getText());
                 selectedRecord.setGenre(txtGenre.getText());
                 selectedRecord.setReleaseDate(DateUtil.parse(txtReleaseDate.getText()));
@@ -338,6 +356,7 @@ public class Controller {
 
             } else {
                 Record newRecord = new Record();
+                newRecord.setArtist(txtCategory.getText());
                 newRecord.setArtist(txtArtist.getText());
                 newRecord.setGenre(txtGenre.getText());
                 newRecord.setReleaseDate(DateUtil.parse(txtReleaseDate.getText()));
@@ -417,7 +436,7 @@ public class Controller {
 
     private static void createJsonFile() throws IOException {
         ArrayList<Record> records = new ArrayList<>();
-        Record record = new Record(Category.VinylRecord,"John Doe", "My Record Title", LocalDate.parse("1995-09-29"), "Pop", "Good", "None",
+        Record record = new Record(Category.VinylPlatte,"John Doe", "My Record Title", LocalDate.parse("1995-09-29"), "Pop", "Good", "None",
                 12.99);
         records.add(record);
         ObjectMapper mapper = new ObjectMapper();

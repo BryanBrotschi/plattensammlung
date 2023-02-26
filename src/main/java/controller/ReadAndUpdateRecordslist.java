@@ -19,8 +19,8 @@ public class ReadAndUpdateRecordslist {
     public static void main(String[] args) throws IOException {
         createJsonFile();
         ArrayList<Record> records = readRecordsFromJson(FILE_PATH);
-        Record record1 = new Record(Category.Casette,"Jane Smith", "New Record 1", LocalDate.parse("1995-09-29"), "Rock", "Excellent", "None", 14.99);
-        Record record2 = new Record(Category.VinylRecord,"Bob Johnson", "New Record 2", LocalDate.parse("1995-09-29"), "Jazz", "Very Good", "Limited edition", 19.99);
+        Record record1 = new Record(Category.Kasette,"Jane Smith", "New Record 1", LocalDate.parse("1995-09-29"), "Rock", "Excellent", "None", 14.99);
+        Record record2 = new Record(Category.VinylPlatte,"Bob Johnson", "New Record 2", LocalDate.parse("1995-09-29"), "Jazz", "Very Good", "Limited edition", 19.99);
         records.add(record1);
         records.add(record2);
         saveRecordsToJson(records, FILE_PATH);
