@@ -48,7 +48,7 @@ public class Record {
 	//category
 
 	public enum Category {
-		Kasette, CD, VinylPlatte;
+		Kasette, CD, VinylRecord;
 	}
 
 	public Category getCategory() {

@@ -129,7 +129,7 @@ public class Controller {
     private void showRecordDetails(Record record) {
         if (record != null) {
             //comboBoxCategory.setValue(record.getCategory());
-            //lblCategory.setText(record.getCategory().toString());
+            lblCategory.setText(record.getCategory().toString());
             lblArtist.setText(record.getArtist());
             lblRecordTitle.setText(record.getRecordTitle());
             lblReleaseDate.setText(record.getReleaseDate().toString());
@@ -165,7 +165,7 @@ public class Controller {
             lblPrice.setText(record.getPrice().toString());
             lblNotice.setText(record.getNotice());
         } else {
-            //lblCategory.setText("");
+            lblCategory.setText("");
             lblArtist.setText("");
             lblRecordTitle.setText("");
             lblReleaseDate.setText("");
@@ -195,7 +195,7 @@ public class Controller {
 
         if (record != null) {
             //comboBoxCategory.setValue(record.getCategory());
-            //txtCategory.setText(record.getCategory().toString());
+            txtCategory.setText(record.getCategory().toString());
             txtArtist.setText(record.getArtist());
             txtTitle.setText(record.getRecordTitle());
             txtGenre.setText(record.getGenre());
@@ -464,7 +464,7 @@ public class Controller {
 
     private static void createJsonFile() throws IOException {
         ArrayList<Record> records = new ArrayList<>();
-        Record record = new Record(Category.VinylPlatte,"John Doe", "My Record Title", LocalDate.parse("1995-09-29"), "Pop", "Good", "None",12.99, "src/main/resources/images/defaultrecord.png");
+        Record record = new Record(Category.VinylRecord,"John Doe", "My Record Title", LocalDate.parse("1995-09-29"), "Pop", "Good", "None",12.99, "src/main/resources/images/defaultrecord.png");
 
         records.add(record);
         ObjectMapper mapper = new ObjectMapper();
