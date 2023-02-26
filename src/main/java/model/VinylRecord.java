@@ -17,5 +17,5 @@ public class VinylRecord extends Record{
         return "VinylRecord []";
     }
     
-    public Category category=Category.VinylPlatte;
+   // public Category category=Category.VinylPlatte;
 }

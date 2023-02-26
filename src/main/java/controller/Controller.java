@@ -125,8 +125,8 @@ public class Controller {
     // Detailansicht
     private void showRecordDetails(Record record) {
         if (record != null) {
-            comboBoxCategory.setValue(record.getCategory());
-            lblCategory.setText(record.getCategory().toString());
+            //comboBoxCategory.setValue(record.getCategory());
+            //lblCategory.setText(record.getCategory().toString());
             lblArtist.setText(record.getArtist());
             lblRecordTitle.setText(record.getRecordTitle());
             lblReleaseDate.setText(record.getReleaseDate().toString());
@@ -160,7 +160,7 @@ public class Controller {
             lblPrice.setText(record.getPrice().toString());
             lblNotice.setText(record.getNotice());
         } else {
-            lblCategory.setText("");
+            //lblCategory.setText("");
             lblArtist.setText("");
             lblRecordTitle.setText("");
             lblReleaseDate.setText("");
@@ -189,8 +189,8 @@ public class Controller {
     private void getRecord(Record record) {
 
         if (record != null) {
-            comboBoxCategory.setValue(record.getCategory());
-            txtCategory.setText(record.getCategory().toString());
+            //comboBoxCategory.setValue(record.getCategory());
+            //txtCategory.setText(record.getCategory().toString());
             txtArtist.setText(record.getArtist());
             txtTitle.setText(record.getRecordTitle());
             txtGenre.setText(record.getGenre());
@@ -255,7 +255,7 @@ public class Controller {
 
     @FXML
     private void clearRecordDetails() {
-        txtCategory.setText("");
+        //comboBoxCategory.getSelectionModel().clearSelection();
         txtArtist.setText("");
         txtGenre.setText("");
         txtNotice.setText("");
@@ -269,9 +269,9 @@ public class Controller {
 
     private boolean isInputValid() {
         String errorMessage = "";
-        if (txtCategory.getText().isEmpty()) {
-            errorMessage += "Kategorie ist leer!\n";
-        }
+        //if (comboBoxCategory.getSelectionModel().isEmpty()) {
+          //  errorMessage += "Bitte wählen Sie die Kategorie aus!\n";
+        //}
         if (txtArtist.getText().isEmpty()) {
             errorMessage += "Artist ist leer!\n";
         }
@@ -298,7 +298,7 @@ public class Controller {
             }
         }
         if (comboBoxCondition.getSelectionModel().isEmpty()) {
-            errorMessage += "Bitte wählen Sie den Zustand der Platte aus!\n";
+            errorMessage += "Bitte wählen Sie den Zustand aus!\n";
         }
         if (errorMessage.length() == 0) {
             return true;
@@ -318,7 +318,7 @@ public class Controller {
         if (isInputValid()) {
             Record selectedRecord = recordTableView.getSelectionModel().getSelectedItem();
             if (selectedRecord != null) {
-                selectedRecord.setCategory(Category.valueOf(txtCategory.getText()));
+                //selectedRecord.setCategory(Category.valueOf(txtCategory.getText()));
                 selectedRecord.setArtist(txtArtist.getText());
                 selectedRecord.setGenre(txtGenre.getText());
                 selectedRecord.setReleaseDate(DateUtil.parse(txtReleaseDate.getText()));
@@ -359,7 +359,7 @@ public class Controller {
 
             } else {
                 Record newRecord = new Record();
-                newRecord.setCategory(Category.valueOf(txtCategory.getText()));
+                //newRecord.setCategory(Category.valueOf(txtCategory.getText()));
                 newRecord.setArtist(txtArtist.getText());
                 newRecord.setGenre(txtGenre.getText());
                 newRecord.setReleaseDate(DateUtil.parse(txtReleaseDate.getText()));
@@ -406,7 +406,7 @@ public class Controller {
         int selectedIndex = recordTableView.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
             Alert confirmationAlert = new Alert(AlertType.CONFIRMATION);
-            confirmationAlert.setTitle("Platte");
+            confirmationAlert.setTitle("Medium");
             confirmationAlert.setContentText("Löschen?");
             ButtonType okButton = new ButtonType("JA");
             ButtonType noButton = new ButtonType("NEIN");
@@ -429,9 +429,9 @@ public class Controller {
         } else {
 
             Alert alert = new Alert(AlertType.WARNING);
-            alert.setTitle("Platte löschen");
-            alert.setHeaderText("Keine Platte ausgewählt");
-            alert.setContentText("Bitte wählen Sie eine Platte in der Liste aus.");
+            alert.setTitle("Medium löschen");
+            alert.setHeaderText("Kein Medium ausgewählt");
+            alert.setContentText("Bitte wählen Sie ein Medium in der Liste aus.");
             alert.showAndWait();
 
         }
