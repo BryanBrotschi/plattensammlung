@@ -1,0 +1,11 @@
+model\VinylRecord.class
+model\CompactDisc.class
+util\DateUtil.class
+controller\Controller.class
+MainApp.class
+controller\LocalDateAdapter.class
+model\Record$Category.class
+model\Record.class
+MainAppLauncher.class
+controller\Controller$1.class
+model\Cassette.class

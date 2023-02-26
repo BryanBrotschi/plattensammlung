@@ -261,7 +261,11 @@
                                     <Insets bottom="20.0" top="20.0" />
                                  </padding>
                               </GridPane>
-                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                              <Button fx:id="btnCover" mnemonicParsing="false" onAction="#uploadCover" text="Cover hinzufügen" />
+                              <ImageView fx:id="imgCoverEditor" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/defaultrecord.png" />
+                                 </image></ImageView>
                            </children>
                         </HBox>
                      </children>

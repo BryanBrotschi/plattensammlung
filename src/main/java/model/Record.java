@@ -13,6 +13,8 @@ import javafx.beans.property.DoubleProperty;
 
 public class Record {
 
+	
+
 	private Category category;
 	private StringProperty artist;
 	private StringProperty recordTitle;
@@ -21,15 +23,16 @@ public class Record {
 	private StringProperty condition;
 	private StringProperty notice;
 	private DoubleProperty price;
+	private StringProperty cover;
 	
 
 
 	public Record() {
-		this(null, null, null, null, null, null, null, 0.0);
+		this(null, null, null, null, null, null, null, 0.0, null);
 	}
 
 	public Record(Category category, String artist, String recordTitle, LocalDate releaseDate, String genre, String condition,
-			String notice, Double price) {
+			String notice, Double price, String cover) {
 
 		this.category = category;
 		this.artist = new SimpleStringProperty(artist);
@@ -39,6 +42,7 @@ public class Record {
 		this.condition = new SimpleStringProperty(condition);
 		this.notice = new SimpleStringProperty(notice);
 		this.price = new SimpleDoubleProperty(price);
+		this.cover = new SimpleStringProperty(cover);
 	}
 
 	//category
@@ -157,6 +161,18 @@ public class Record {
 
 	public void setPrice(Double price) {
 		this.price.set(price);
+	}
+
+	// cover
+	public StringProperty coverProperty() {
+		return cover;
+	}
+	public String getCover() {
+		return cover.get();
+	}
+
+	public void setCover(String cover) {
+		this.cover.set(cover);
 	}
 
 	@Override
